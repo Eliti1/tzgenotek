@@ -1,12 +1,11 @@
 #!/bin/bash
 
-echo "Настраиваем реестр..."
 # Получаем ID из JSON файла
-yid=$(jq -r '.id' /home/$USER/authorized_key.json)
+yid=$(jq -r '.id' ./authorized_key.json)
 echo "id: $yid"
 
 # Создаем реестр
-yc container registry create --name genotek-app || true
+yc container registry create --name genotek-app 
 
 # Выводим список репозиториев
 yc container repository list --registry-id $yid

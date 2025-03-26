@@ -4,6 +4,9 @@
 yc config set service-account-key /home/$USER/authorized_key.json
 yc config list
 
+# Установка JQ
+sudo apt-get install -y jq
+
 # Получаем ID из JSON файла
 yid=$(jq -r '.id' ./authorized_key.json)
 echo "id: $yid"

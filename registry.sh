@@ -36,3 +36,6 @@ docker run -d -p 5000:5000 cr.yandex/$yid/genotek-app:latest
 # Проверяем работоспособность
 sleep 5  # Даем контейнеру время запуститься
 curl http://localhost:5000/time
+
+#Добавим права на выполнение скрипта для проверки ошибки
+chmod +x check_error.sh

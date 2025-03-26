@@ -7,34 +7,30 @@ yc config list
 # Установка JQ
 sudo apt-get install -y jq
 
-# Получаем ID из JSON файла
-yid=$(jq -r '.id' ./authorized_key.json)
-echo "id: $yid"
+registry_id=$(yc container registry list --format json | jq -r '.[0].id')
+echo "Registry ID: $registry_id"
 
-# Создаем реестр
-yc container registry create --name genotek-app 
+# Создаем реестр (если ещё не создан)
+yc container registry create --name genotek-app
 
-# Выводим список репозиториев
-yc container repository list --registry-id $yid
-
-# Конфигурируем Docker
+# Авторизация в Docker
 yc container registry configure-docker
+docker login cr.yandex -u iam -p $(yc iam create-token)
 
 # Билдим образ
-#cd genotek
 docker build -t genotek-app:latest .
 
 # Присваиваем тег
-docker tag genotek-app:latest cr.yandex/$yid/genotek-app:latest
+docker tag genotek-app:latest cr.yandex/$registry_id/genotek-app:latest
 
-# Пушим в яндекс registry
-docker push cr.yandex/$yid/genotek-app:latest
+# Пушим в реестр
+docker push cr.yandex/$registry_id/genotek-app:latest
 
 # Запускаем образ
-docker run -d -p 5000:5000 cr.yandex/$yid/genotek-app:latest
+docker run -d -p 5000:5000 cr.yandex/$registry_id/genotek-app:latest
 
-# Проверяем работоспособность
-sleep 5  # Даем контейнеру время запуститься
+# Проверяем
+sleep 5
 curl http://localhost:5000/time
 
 #Добавим права на выполнение скрипта для проверки ошибки

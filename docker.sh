@@ -23,7 +23,3 @@ sudo groupadd docker
 sudo usermod -aG docker $USER
 
 newgrp docker
-
-# Установка JQ
-sudo apt-get install -y jq
-

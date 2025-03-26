@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-yc config set service-account-key /home/$USER/authorized_key.json
+yc config set service-account-key /home/$USER/tzgenotek/authorized_key.json
 yc config list
 
 # Установка JQ
